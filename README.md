@@ -18,4 +18,8 @@ O repositório contém os seguintes arquivos:
     5. Um arquivo **Tipo.java** (Enum para tipos de imóveis, limitando a escolha do usuário. Classe agregada à Imovel.java).
 
     6. Um arquivo **Agenda.java** (classe correspondente a objetos do tipo Agenda. Classe agregada à Imovel.java).
+    
+    7. Um arquivo **BancoDeProprietarios.java** (classe responsável por armazenar todos os proprietários do Sistema dentro de um ArrayList, só interage com Aplicacao.java).
+     
+    8. Um arquivo **Aplicacao.java** (classe com métodos estáticos para o funcionamento do programa, com opções de acessibilidade para o usuário por meio do prompt de comando). 
 
