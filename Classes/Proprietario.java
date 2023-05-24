@@ -99,6 +99,10 @@ public class Proprietario {
         }
     }
 
+    public ArrayList<Imovel> getImoveis() {
+        return imoveis;
+    }
+
 /*
     public static void main(String[] args) {
         Classes.Proprietario proprietario = new Classes.Proprietario("João", "12345678901", "123456789", "12345678", "SP", "São Paulo", "Rua dos Bobos", 0);
