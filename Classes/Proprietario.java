@@ -43,8 +43,6 @@ public class Proprietario {
     }
 
 
-    // Ainda não tenho certeza se seria melhor criar o objeto imóvel fora da chamada do addImovel, ou se é melhor criar o objeto dentro da chamada do addImovel.
-    // De qualquer modo, tal implementação subentende que o imóvel não irá existir sem um proprietário(dentro do programa).
     public void addImovel(Imovel imovel) {
         this.imoveis.add(imovel);
     }
@@ -95,6 +93,35 @@ public class Proprietario {
                 System.out.println("Utilidade: " + imovel.getUtilidade());
                 System.out.println("IPTU: " + imovel.getIptu() + "\n");
                 System.out.println("#################################################################################\n");
+            }
+        }
+    }
+
+    public ArrayList<Imovel> getImoveis() {
+        return this.imoveis;
+    }
+
+    public void listaImoveis(){
+        int cnt = 1;
+        for (Imovel imovel : imoveis) {
+            System.out.println("Imóvel " + cnt++ + ":");
+            System.out.println(imovel);
+            cnt++;
+        }
+    }
+
+    public void removeImovelIndex(int index){
+        this.imoveis.remove(index);
+    }
+
+    public Imovel getImovelIndex(int index){
+        return this.imoveis.get(index);
+    }
+
+    public void listaImoveisDisponiveis(){
+        for(Imovel imovel : imoveis){
+            if(imovel.getDisponibilidade()){
+                System.out.println(imovel);
             }
         }
     }

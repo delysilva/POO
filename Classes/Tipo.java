@@ -1,16 +1,16 @@
 package Classes;
 
 public enum Tipo{
-    CASA("Casa"),
-    APARTAMENTO("Apartamento"),
-    TERRENO("Terreno"),
-    QUARTO("Quarto"),
-    GALPAO("Galpão"),
-    CHACARA("Chácara"),
-    FAZENDA("Fazenda"),
-    SITIO("Sítio"),
-    PREDIO("Prédio"),
-    OUTRO("Outro");
+    Casa("Casa"),
+    Apartamento("Apartamento"),
+    Terreno("Terreno"),
+    Quarto("Quarto"),
+    Galpao("Galpão"),
+    Chacara("Chácara"),
+    Fazenda("Fazenda"),
+    Sitio("Sítio"),
+    Predio("Prédio"),
+    Outro("Outro");
 
     private String nome;
 

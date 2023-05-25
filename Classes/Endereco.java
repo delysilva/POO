@@ -67,13 +67,16 @@ public class Endereco {
         this.numero = numero;
     }
 
-/* TESTE
+    public String toString() {
+        String ans = "Endereço:\n CEP: " + this.cep + "\n Estado: " + this.estado.getNome() + "\n Cidade: " + this.cidade + "\n Rua: " + this.rua + "\n Número: " + this.numero;
+        return ans;
+    }
+/*
     public static void main(String[] args) {
         Classes.Endereco endereco = new Classes.Endereco("12345678", "BA", "Salvador", "Rua 1", 1);
         System.out.println(endereco.getEstado());
         endereco.setEstado("SP");
-        System.out.println(endereco.getEstado());
+        System.out.println(endereco);
     }
-
- */
+*/
 }
