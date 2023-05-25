@@ -1,7 +1,22 @@
 package Classes;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.time.LocalDate;
 
+
+/*
+COMO USAR O LOCALDATE:
+
+            YYYY-MM-DD
+
+class Main {
+    public static void main(String[] args) {
+
+        LocalDate data = LocalDate.of(2020, 2, 20);
+
+        System.out.println(data);
+    }
+ }
+*/
 
 //agenda que irá gerenciar a disponibilidade do imóvel
 /*
@@ -14,17 +29,18 @@ import java.util.Calendar;
 *    (TALVEZ HAJA UMA IMPLEMENTAÇÃO MELHOR, MAS COMO NÃO ESTOU TÃO FAMILIARIZADO COM A CLASSE CALENDAR, ACHEI MELHOR FAZER ASSIM)
  */
 public class Agenda {
-    private ArrayList<Calendar> datasAlugadas;
-    private ArrayList<Calendar> datasBloqueadas;
+    private ArrayList<LocalDate> datasAlugadas;
+    private ArrayList<LocalDate> datasBloqueadas;
     boolean bloquearAgenda;
 
     public Agenda() {
-        this.datasAlugadas = new ArrayList<Calendar>();
-        this.datasBloqueadas = new ArrayList<Calendar>();
+        this.datasAlugadas = new ArrayList<LocalDate>();
+        this.datasBloqueadas = new ArrayList<LocalDate>();
         this.bloquearAgenda = false;
     }
 
-    public void bloquearData(Calendar data){
+    public void bloquearData(int ano, int mes, int dia){
+        LocalDate data = LocalDate.of(ano, mes, dia);
         if(!this.datasBloqueadas.contains(data) && !this.bloquearAgenda) {
             this.datasBloqueadas.add(data);
             if(this.datasAlugadas.contains(data)){
@@ -33,24 +49,28 @@ public class Agenda {
         }
     }
 
-    public void alugarData(Calendar data){
+    public void alugarData(int ano, int mes, int dia){
+        LocalDate data = LocalDate.of(ano, mes, dia);
         if(!this.datasBloqueadas.contains(data) && !this.datasAlugadas.contains(data) && !this.bloquearAgenda){
             this.datasAlugadas.add(data);
         }
     }
-    public void desbloquearData(Calendar data){
+    public void desbloquearData(int ano, int mes, int dia){
+        LocalDate data = LocalDate.of(ano, mes, dia);
         if(this.datasBloqueadas.contains(data)){
             this.datasBloqueadas.remove(data);
         }
     }
     // para enventuais cancelamentos
-    public void desalugarData(Calendar data){
+    public void desalugarData(int ano, int mes, int dia){
+        LocalDate data = LocalDate.of(ano, mes, dia);
         if(this.datasAlugadas.contains(data)){
             this.datasAlugadas.remove(data);
         }
     }
     // para consultar se uma data está disponível
-    public boolean isDisponivel(Calendar data) {
+    public boolean isDisponivel(int ano, int mes, int dia){
+        LocalDate data = LocalDate.of(ano, mes, dia);
         if (this.datasBloqueadas.contains(data) || this.datasAlugadas.contains(data)) {
             return false;
         }
