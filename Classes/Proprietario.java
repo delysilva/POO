@@ -98,7 +98,7 @@ public class Proprietario {
     }
 
     public ArrayList<Imovel> getImoveis() {
-        return imoveis;
+        return this.imoveis;
     }
 
     public void listaImoveis(){

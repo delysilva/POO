@@ -85,6 +85,9 @@ public class Aplicacao {
             int opcao = scanner1.nextInt();
             if(opcao == 1){
                 imovel.alugar(ano, mes, dia);
+                System.out.println("Imóvel alugado em seu nome! Obrigado por utilizar nosso sistema!\n");
+                System.out.println("Vamos te redirecionar para o menu principal.\n");
+                System.out.println("______________________________________________________\n");
             }else{
                 System.out.println("Obrigado por utilizar nosso sistema!\n");
             }
