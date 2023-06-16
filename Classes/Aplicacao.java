@@ -64,7 +64,16 @@ public class Aplicacao {
         System.out.println("Digite o número do imóvel que deseja alugar:");
         int numero = scanner1.nextInt();
         Imovel imovel = sistema.getImovel(estado, cidade, numero);
-        alugar(imovel, sistema);
+        System.out.println("Você escolheu o imóvel: " + imovel.toString() + "\n Certo?\n");
+        System.out.println("1 - Sim");
+        System.out.println("2 - Não (ESCOLHER NOVAMENTE)");
+        int opcao = scanner1.nextInt();
+        if(opcao == 1){
+            alugar(imovel, sistema);
+        }
+        else{
+            alugarImovel(sistema);
+        }
     }
 
     public static void alugar(Imovel imovel, BancoDeProprietarios sistema){
@@ -79,10 +88,20 @@ public class Aplicacao {
         System.out.println("Vamos verificar se o imóvel está disponível para aluguel na data especificada:\n");
         if(imovel.isDisponivel(ano, mes, dia)){
             System.out.println("O imóvel está disponível para aluguel na data especificada!\n");
+            System.out.println("Por favor, digite o índice de sazonalidade correspondente:");
+            //Reveillon, índice 20; Carnaval, índice 15; Feriado Alta Estação, índice 10; Feriado Baixa Estação, índice 5; 0:Comum (sem índice).
+            System.out.println("1 - Reveillon");
+            System.out.println("2 - Carnaval");
+            System.out.println("3 - Feriado Alta Estação");
+            System.out.println("4 - Feriado Baixa Estação");
+            System.out.println("5 - Nenhuma das anteriores");
+            int opcao = scanner1.nextInt();
+            System.out.println("O valor do aluguel será: \n");
+            calculaAluguel(imovel, opcao);
             System.out.println("Deseja alugar o imóvel?");
             System.out.println("1 - Sim");
             System.out.println("2 - Não");
-            int opcao = scanner1.nextInt();
+            opcao = scanner1.nextInt();
             if(opcao == 1){
                 imovel.alugar(ano, mes, dia);
                 System.out.println("Imóvel alugado em seu nome! Obrigado por utilizar nosso sistema!\n");
@@ -103,6 +122,26 @@ public class Aplicacao {
                 System.out.println("Obrigado por utilizar nosso sistema!\n");
             }
         }
+    }
+
+    public static void calculaAluguel(Imovel imovel, int sazonalidade){
+        //Reveillon, índice 20; Carnaval, índice 15; Feriado Alta Estação, índice 10; Feriado Baixa Estação, índice 5; 0:Comum (sem índice).
+        if(sazonalidade == 1){
+            sazonalidade = 20;
+        }else if(sazonalidade == 2){
+            sazonalidade = 15;
+        }
+        else if(sazonalidade == 3){
+            sazonalidade = 10;
+        }
+        else if(sazonalidade == 4){
+            sazonalidade = 5;
+        }
+        else{
+            sazonalidade = 0;
+        }
+        float valor =  imovel.valorAluguel() + imovel.valorAluguel()*(float)sazonalidade;
+        System.out.println("R$" + valor);
     }
 
     // CADASTRAR PROPRIETARIO
@@ -135,6 +174,11 @@ public class Aplicacao {
     public static void cadastrarImovel(Proprietario proprietario){
         Scanner scanner = new Scanner(System.in);
         Scanner scanner1 = new Scanner(System.in);
+        System.out.println("O seu imóvel está dentro de um condomínio?");
+        System.out.println("1 - Sim");
+        System.out.println("2 - Não");
+        System.out.println("\n");
+        int opcao = scanner1.nextInt();
         System.out.println("Digite o CEP do seu imóvel:");
         String cep = scanner.nextLine();
         System.out.println("Digite o estado do seu imóvel:");
@@ -151,8 +195,34 @@ public class Aplicacao {
         String utilidade = scanner.nextLine();
         System.out.println("Digite o valor do IPTU do seu imóvel:");
         float iptu = scanner1.nextFloat();
-        Imovel imovel = new Imovel(cep, estado, cidade, rua, numero, tipo, utilidade, iptu);
-        proprietario.addImovel(imovel);
+        if(opcao == 1) {
+            System.out.println("Digite o nome do seu condomínio:");
+            String nomeCondominio = scanner.nextLine();
+            System.out.println("Digite a identificação da sua casa dentro do condomínio:");
+            String identificacao = scanner.nextLine();
+            Imovel imovel = new UnidadeCompartilhada(nomeCondominio, cep, estado, cidade, rua, numero, tipo, utilidade, iptu, identificacao);
+            System.out.println("O seu condomínio possui itens de lazer? (psicina, quadra, etc.)");
+            System.out.println("1 - Sim");
+            System.out.println("2 - Não");
+            int opcao1 = scanner1.nextInt();
+            if (opcao1 == 1) {
+                System.out.println("Quantos?");
+                int quantidade = scanner1.nextInt();
+                for (int i = 0; i < quantidade; i++) {
+                    System.out.println("Digite o nome do " + (i+1) + "º item de lazer:");
+                    String item = scanner.nextLine();
+                    ((UnidadeCompartilhada)imovel).addItensDeLazer(item);
+                }
+            }
+            proprietario.addImovel(imovel);
+        }else{
+            System.out.println("Digite o tamanho da Área CONSTRUÍDA seu imóvel em metros quadrados:");
+            float areaConstruida = scanner1.nextFloat();
+            System.out.println("Digite o tamanho da Área TOTAL seu imóvel em metros quadrados:");
+            float areaTotal = scanner1.nextFloat();
+            Imovel imovel = new UnidadeAutonoma(cep, estado, cidade, rua, numero, tipo, utilidade, iptu, areaConstruida, areaTotal);
+            proprietario.addImovel(imovel);
+        }
         System.out.println("Imóvel cadastrado com sucesso"+proprietario.getNome()+"!\n");
     }
 

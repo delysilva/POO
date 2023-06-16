@@ -32,9 +32,11 @@ public class BancoDeProprietarios {
                 if(String.valueOf(imovel.getEndereco().getEstado()).equals(estado) && imovel.getEndereco().getCidade().equals(cidade)){
                     System.out.println("Imóvel " + contador + ":");
                     System.out.println("Proprietário: " + proprietario.getNome());
-                    System.out.println("Endereço: " + imovel.getEndereco().getRua() + ", " + imovel.getEndereco().getNumero());
-                    System.out.println("Tipo: " + imovel.getTipo());
-                    System.out.println("Utilidade: " + imovel.getUtilidade());
+                    if(imovel instanceof UnidadeCompartilhada){
+                        System.out.println((UnidadeCompartilhada)imovel);
+                    }else{
+                        System.out.println((UnidadeAutonoma)imovel);
+                    }
                     System.out.println("------------------------------------------------------------------");
                     contador++;
                 }
