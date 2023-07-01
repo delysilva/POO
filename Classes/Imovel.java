@@ -46,20 +46,20 @@ public abstract class Imovel {
         return this.agenda.isAgendaBloqueada();
     }
 
-    public void bloquearData(int ano, int mes, int dia){
-        this.agenda.bloquearData(ano, mes, dia);
+    public void bloquearData(int ano, int mes, int dia, int dias){
+        this.agenda.bloquearData(ano, mes, dia, dias);
     }
 
     public void bloquearAgenda(){
         this.agenda.bloquearAgenda();
     }
 
-    public boolean isDisponivel(int ano, int mes, int dia){
-        return this.agenda.isDisponivel(ano, mes, dia);
+    public boolean isDisponivel(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        return this.agenda.isDisponivel(ano, mes, dia, ano1, mes1, dia1);
     }
 
-    public void alugar(int ano, int mes, int dia){
-        this.agenda.alugarData(ano, mes, dia);
+    public void alugar(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        this.agenda.alugarData(ano, mes, dia, ano1, mes1, dia1);
     }
     public String toString() {
         return "Imovel:\n" + endereco.toString() + "\nTipo: " + this.tipo.getNome() + "\nUtilidade: " + this.utilidade + "\nIPTU: " + this.iptu;

@@ -1,6 +1,8 @@
 package Classes;
+import java.time.LocalDate;
 import java.util.Scanner;
-import java.util.prefs.BackingStoreException;
+import java.time.Period;
+
 
 //definir aplicação que vai gerenciar a interação com o usuário.
 
@@ -78,15 +80,21 @@ public class Aplicacao {
 
     public static void alugar(Imovel imovel, BancoDeProprietarios sistema){
         Scanner scanner1 = new Scanner(System.in);
-        System.out.println("Vamos decidir o dia da sua estadia:\n");
+        System.out.println("Vamos decidir a duração da sua estadia:\n");
         System.out.println("Digite o ano em que pretende alugar o imóvel:");
         int ano = scanner1.nextInt();
-        System.out.println("Digite o mês em que pretende alugar o imóvel:");
+        System.out.println("Digite o mês da data de entrada:");
         int mes = scanner1.nextInt();
-        System.out.println("Digite o dia em que pretende alugar o imóvel:");
+        System.out.println("Digite o dia da data de entrada:");
         int dia = scanner1.nextInt();
-        System.out.println("Vamos verificar se o imóvel está disponível para aluguel na data especificada:\n");
-        if(imovel.isDisponivel(ano, mes, dia)){
+        System.out.println("Digite o ano de saída do imóvel:");
+        int ano1 = scanner1.nextInt();
+        System.out.println("Digite o mês da data de saída:");
+        int mes1 = scanner1.nextInt();
+        System.out.println("Digite o dia da data de saída:");
+        int dia1 = scanner1.nextInt();
+        System.out.println("Vamos verificar se o imóvel está disponível para aluguel na data/período especificado:\n");
+        if(imovel.isDisponivel(ano, mes, dia, ano1, mes1, dia1)){
             System.out.println("O imóvel está disponível para aluguel na data especificada!\n");
             System.out.println("Por favor, digite o índice de sazonalidade correspondente:");
             //Reveillon, índice 20; Carnaval, índice 15; Feriado Alta Estação, índice 10; Feriado Baixa Estação, índice 5; 0:Comum (sem índice).
@@ -97,13 +105,17 @@ public class Aplicacao {
             System.out.println("5 - Nenhuma das anteriores");
             int opcao = scanner1.nextInt();
             System.out.println("O valor do aluguel será: \n");
-            calculaAluguel(imovel, opcao);
+            LocalDate incio = LocalDate.of(ano, mes, dia);
+            LocalDate fim = LocalDate.of(ano1, mes1, dia1);
+            Period periodo = Period.between(incio, fim);
+            int dias = periodo.getDays();
+            calculaAluguel(imovel, opcao, dias);
             System.out.println("Deseja alugar o imóvel?");
             System.out.println("1 - Sim");
             System.out.println("2 - Não");
             opcao = scanner1.nextInt();
             if(opcao == 1){
-                imovel.alugar(ano, mes, dia);
+                imovel.alugar(ano, mes, dia, ano, mes1, ano1);
                 System.out.println("Imóvel alugado em seu nome! Obrigado por utilizar nosso sistema!\n");
                 System.out.println("Vamos te redirecionar para o menu principal.\n");
                 System.out.println("______________________________________________________\n");
@@ -124,7 +136,7 @@ public class Aplicacao {
         }
     }
 
-    public static void calculaAluguel(Imovel imovel, int sazonalidade){
+    public static void calculaAluguel(Imovel imovel, int sazonalidade, int dias){
         //Reveillon, índice 20; Carnaval, índice 15; Feriado Alta Estação, índice 10; Feriado Baixa Estação, índice 5; 0:Comum (sem índice).
         if(sazonalidade == 1){
             sazonalidade = 20;
@@ -140,18 +152,41 @@ public class Aplicacao {
         else{
             sazonalidade = 0;
         }
-        float valor =  imovel.valorAluguel() + imovel.valorAluguel()*(float)sazonalidade;
+        float valor =  dias*(imovel.valorAluguel() + imovel.valorAluguel()*(float)sazonalidade);
         System.out.println("R$" + valor);
     }
 
     // CADASTRAR PROPRIETARIO
     public static void cadastrarProprietario(BancoDeProprietarios sistema){
+        // aqui eu trato a exceção de CPF já cadastrado
+
         Scanner scanner = new Scanner(System.in);
         Scanner scanner1 = new Scanner(System.in);
         System.out.println("Digite seu nome:");
         String nome = scanner.nextLine();
         System.out.println("Digite seu CPF:");
         String cpf = scanner.nextLine();
+        if(sistema.isCadastrado(cpf)){
+            try{
+                throw new UsuarioExistenteException("CPF já cadastrado!");
+            }
+            catch(UsuarioExistenteException e){
+                System.out.println(e.getMessage());
+                System.out.println("Para tentar novamente, digite 1\nPara sair, digite 2");
+                int opcao = scanner1.nextInt();
+                switch(opcao){
+                    case 1:
+                        cadastrarProprietario(sistema);
+                        break;
+                    case 2:
+                        System.out.println("Obrigado por utilizar nosso sistema!\n");
+                        break;
+                    default:
+                        System.out.println("Opção inválida!\n");
+                        break;
+                }
+            }
+        }
         System.out.println("Digite sua identidade:");
         String identidade = scanner.nextLine();
         System.out.println("Digite seu CEP:");
@@ -334,7 +369,9 @@ public class Aplicacao {
                 int mes = scanner1.nextInt();
                 System.out.println("Digite o ano:");
                 int ano = scanner1.nextInt();
-                imovel.bloquearData(dia, mes, ano);
+                System.out.println("Quantos dias esse bloqueio vai durar?");
+                int dias = scanner1.nextInt();
+                imovel.bloquearData(dia, mes, ano, dias);
                 System.out.println("Data bloqueada com sucesso!\n");
                 menuEditarImovel(imovel);
                 break;

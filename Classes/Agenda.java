@@ -27,56 +27,90 @@ class Main {
 *     4 - PARA CONSULTAR AS DATAS DISPONÍVEIS, BASTA CHECAR SE A DATA NÃO ESTÁ EM NENHUM DOS DOIS ARRAY LISTS
 *
 *    (TALVEZ HAJA UMA IMPLEMENTAÇÃO MELHOR, MAS COMO NÃO ESTOU TÃO FAMILIARIZADO COM A CLASSE CALENDAR, ACHEI MELHOR FAZER ASSIM)
+*
+*
+*   ############ ATUALIZAÇÃO ###################
+*           AGORA ESTAMOS PASSANDO DUAS DATAS QUE CRIAM UM PERÍODO DE ESTADIA
+*           PODEMOS PASSAR APENAS A DATA DE INÍCIO E QUANTOS DIAS QUEREMOS ALUGAR
+*
+*
+* ##### IMPORTANTE ########
+*
+*  DATAS BLOQUEADAS SÃO DO TIPO LOCALDATE POIS FICA MAIS FÁCIL DE CONSULTAR? TALVEZ
  */
 public class Agenda {
-    private ArrayList<LocalDate> datasAlugadas;
-    private ArrayList<LocalDate> datasBloqueadas;
+    private ArrayList<Periodo> datasAlugadas;
+    private ArrayList<Periodo> datasBloqueadas;
     boolean bloquearAgenda;
 
     public Agenda() {
-        this.datasAlugadas = new ArrayList<LocalDate>();
-        this.datasBloqueadas = new ArrayList<LocalDate>();
+        this.datasAlugadas = new ArrayList<Periodo>();
+        this.datasBloqueadas = new ArrayList<Periodo>();
         this.bloquearAgenda = false;
     }
 
-    public void bloquearData(int ano, int mes, int dia){
+    // você pode bloquear uma data/periodo
+    public void bloquearData(int ano, int mes, int dia, int dias){
         LocalDate data = LocalDate.of(ano, mes, dia);
-        if(!this.datasBloqueadas.contains(data) && !this.bloquearAgenda) {
-            this.datasBloqueadas.add(data);
-            if(this.datasAlugadas.contains(data)){
-                this.datasAlugadas.remove(data);
+        for (Periodo periodo : this.datasAlugadas) {
+            if((periodo.getInicio().isBefore(data) && periodo.getFim().isAfter(data)) || (periodo.getInicio().isAfter(data) && periodo.getFim().isBefore(data.plusDays(dias))) || (periodo.getFim().isAfter(data) && periodo.getFim().isBefore(data.plusDays(dias)))){
+                this.datasAlugadas.remove(periodo);
+                this.datasBloqueadas.add(periodo);
             }
         }
     }
 
-    public void alugarData(int ano, int mes, int dia){
-        LocalDate data = LocalDate.of(ano, mes, dia);
-        if(!this.datasBloqueadas.contains(data) && !this.datasAlugadas.contains(data) && !this.bloquearAgenda){
-            this.datasAlugadas.add(data);
+
+    public void alugarData(int ano, int mes, int dia, int dias){
+        // mesma verificação de antes para ver se o período de aluguel não está dentro de um período já alugado ou bloqueado
+        if(isDisponivel(ano, mes, dia, dias)){
+            this.datasAlugadas.add(new Periodo(ano, mes, dia, dias));
         }
     }
-    public void desbloquearData(int ano, int mes, int dia){
-        LocalDate data = LocalDate.of(ano, mes, dia);
-        if(this.datasBloqueadas.contains(data)){
-            this.datasBloqueadas.remove(data);
+
+    public void alugarData(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        // mesma verificação de antes para ver se o período de aluguel não está dentro de um período já alugado ou bloqueado
+        if(isDisponivel(ano, mes, dia, ano1, mes1, dia1)){
+            this.datasAlugadas.add(new Periodo(ano, mes, dia, ano1, mes1, dia1));
         }
     }
-    // para enventuais cancelamentos
+    // para enventuais cancelamentos, porém, precisa de melhoria para cancelar apenas a data, conservando o restante do período
     public void desalugarData(int ano, int mes, int dia){
-        LocalDate data = LocalDate.of(ano, mes, dia);
+        Periodo data = new Periodo(ano, mes, dia, 0);
         if(this.datasAlugadas.contains(data)){
             this.datasAlugadas.remove(data);
         }
     }
-    // para consultar se uma data está disponível
-    public boolean isDisponivel(int ano, int mes, int dia){
-        LocalDate data = LocalDate.of(ano, mes, dia);
-        if (this.datasBloqueadas.contains(data) || this.datasAlugadas.contains(data)) {
-            return false;
+    // para consultar se um Período está disponível (funciona)
+    public boolean isDisponivel(int ano, int mes, int dia, int dias){
+        Periodo periodo = new Periodo(ano, mes, dia, dias);
+        for (Periodo periodoAlugado : this.datasAlugadas) {
+            if((periodo.getInicio().isAfter(periodoAlugado.getInicio()) && periodo.getInicio().isBefore(periodoAlugado.getFim())) || periodo.getFim().isAfter(periodoAlugado.getInicio()) && periodo.getFim().isBefore(periodoAlugado.getFim()) || (periodo.getInicio().isBefore(periodoAlugado.getInicio()) && periodo.getFim().isAfter(periodoAlugado.getFim()))){
+                return false;
+            }
+        }
+        for (Periodo periodoBloqueado : this.datasBloqueadas) {
+            if((periodoBloqueado.getInicio().isBefore(periodo.getInicio()) && periodoBloqueado.getFim().isAfter(periodo.getFim())) || (periodoBloqueado.getFim().isBefore(periodo.getFim()) && periodoBloqueado.getFim().isAfter(periodo.getInicio())) || periodoBloqueado.getInicio().isBefore(periodo.getFim()) && periodoBloqueado.getInicio().isAfter(periodo.getInicio())){
+                return false;
+            }
         }
         return true;
     }
 
+    public boolean isDisponivel(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        Periodo periodo = new Periodo(ano, mes, dia, ano1, mes1, dia1);
+        for (Periodo periodoAlugado : this.datasAlugadas) {
+            if((periodo.getInicio().isAfter(periodoAlugado.getInicio()) && periodo.getInicio().isBefore(periodoAlugado.getFim())) || periodo.getFim().isAfter(periodoAlugado.getInicio()) && periodo.getFim().isBefore(periodoAlugado.getFim()) || (periodo.getInicio().isBefore(periodoAlugado.getInicio()) && periodo.getFim().isAfter(periodoAlugado.getFim()))){
+                return false;
+            }
+        }
+        for (Periodo periodoBloqueado : this.datasBloqueadas) {
+            if((periodoBloqueado.getInicio().isBefore(periodo.getInicio()) && periodoBloqueado.getFim().isAfter(periodo.getFim())) || (periodoBloqueado.getFim().isBefore(periodo.getFim()) && periodoBloqueado.getFim().isAfter(periodo.getInicio())) || periodoBloqueado.getInicio().isBefore(periodo.getFim()) && periodoBloqueado.getInicio().isAfter(periodo.getInicio())){
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     // Esses últimos métodos são para "remover" o imóvel da disponibilidade de locação.

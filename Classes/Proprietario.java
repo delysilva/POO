@@ -1,7 +1,7 @@
 package Classes;
 /* Classe responsável por armazenar um proprietário. Que, por sua vez, possuirá imóveis. */
 import java.util.ArrayList;
-public class Proprietario {
+public class Proprietario implements IProprietario{
     private String nome;
 
     //#############################################################################################################

@@ -36,16 +36,16 @@ public class UnidadeCompartilhada extends Imovel{
         return super.getIptu();
     }
 
-    public void bloquearData(int ano, int mes, int dia){
-        super.bloquearData(ano, mes, dia);
+    public void bloquearData(int ano, int mes, int dia, int dias){
+        super.bloquearData(ano, mes, dia, dias);
     }
 
     public void bloquearAgenda(){
         super.bloquearAgenda();
     }
 
-    public boolean isDisponivel(int ano, int mes, int dia){
-        return super.isDisponivel(ano, mes, dia);
+    public boolean isDisponivel(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        return super.isDisponivel(ano, mes, dia, ano1, mes1, dia1);
     }
 
     public boolean getDisponibilidade(){
@@ -68,8 +68,8 @@ public class UnidadeCompartilhada extends Imovel{
         super.setIptu(iptu);
     }
 
-    public void alugar(int ano, int mes, int dia){
-        super.bloquearData(ano, mes, dia);
+    public void alugar(int ano, int mes, int dia, int ano1, int mes1, int dia1){
+        super.alugar(ano, mes, dia, ano1, mes1, dia1);
     }
 
     public float valorAluguel(){
