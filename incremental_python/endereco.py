@@ -47,3 +47,5 @@ class endereco:
         else:
             return False
     
+    def __str__(self):
+        return "CEP: " + self.cep + "\nEstado: " + self.estado + "\nCidade: " + self.cidade + "\nRua: " + self.rua + "\nNúmero: " + str(self.numero)

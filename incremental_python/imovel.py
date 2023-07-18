@@ -1,13 +1,15 @@
 # Classe imovel questao 1 letra a
 import endereco
+import agenda
 
-class Imovel:
+class imovel:
 
     def __init__(self, cep, estado, cidade, rua, numero, iptu, tipo, utilizacao):
-        self.endereco = endereco(cep, estado, cidade, rua, numero)
+        self.endereco = endereco.endereco(cep, estado, cidade, rua, numero)
         self.iptu = iptu
         self.tipo = tipo
         self.utilizacao = utilizacao
+        self.agenda = agenda.agenda()
     
     #gets e sets
 
@@ -32,5 +34,15 @@ class Imovel:
     def set_utilizacao(self, utilizacao):
         self.utilizacao = utilizacao
 
+    def get_agenda(self):
+        return self.agenda
+
     def __str__(self):
         return "Endereço: " + self.endereco.__str__() + "\nIPTU: " + str(self.iptu) + "\nTipo: " + self.tipo + "\nUtilização: " + self.utilizacao
+    
+    def atualizaEndereco(self, cep, estado, cidade, rua, numero):
+        self.endereco.set_cep(cep)
+        self.endereco.set_estado(estado)
+        self.endereco.set_cidade(cidade)
+        self.endereco.set_rua(rua)
+        self.endereco.set_numero(numero)
